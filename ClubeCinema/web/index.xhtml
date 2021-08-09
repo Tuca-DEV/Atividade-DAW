@@ -1,0 +1,101 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+    <h:head>
+        <f:facet name = "first">
+            <meta content='text/html; charset = UTF-8' http-equiv = "Content-Type"/>
+            <title>Cadastro de Filmes</title>
+        </f:facet>
+        <h:outputStylesheet name="style.css" library ="css"/>
+        <h:outputStylesheet name="default.css" library ="css"/>
+        <h:outputStylesheet name="overrides.css" library ="css"/>
+    </h:head>
+    
+    <h:body>
+        <h3>Cadastro de Filmes</h3>
+        
+        <h:dataTable value="#{clubeCinemaBean.filmes}" var="filme"
+                     rowClasses="oddRows, evenRows" headerClass="header"
+                     styleClass="table" cellpadding="5" cellspacing="0">
+            <h:column>
+                <f:facet name ="header">Título</f:facet>
+                    #{filme.título}
+            </h:column>
+            <h:column>
+                <f:facet name ="header">Diretor</f:facet>
+                    #{filme.diretor}
+            </h:column>
+            <h:column>
+                <f:facet name ="header">Gênero</f:facet>
+                    #{filme.gênero}
+            </h:column>
+            <h:column>
+                <f:facet name ="header">Ano</f:facet>
+                    #{filme.ano}
+            </h:column>
+            <h:column>
+                <f:facet name ="header">Oscar</f:facet>
+                    #{filme.oscarMelhorFilme}
+            </h:column>
+        </h:dataTable> 
+        
+        <h:form>
+            <h:commandButton value="Cadastrar" action="#{clubeCinemaBean.reset()}"/>
+            
+            <h:panelGrid columns="3" style="height:100px;width:500px;"
+                         rendered="#{clubeCinemaBean.cadastrar}">
+                
+                <h:outputText value="Título *"/>
+                <h:inputText id="títuloInputText" required="true"
+                             value ="#{clubeCinemaBean.filme.título}"
+                             requiredMessage="Título não preenchido"/>
+                <h:message for="títuloInputText" styleClass="mensagem_erro"/>
+               
+                <h:outputText value="Diretor *"/>
+                <h:inputText id="diretorInputText" required="true"
+                             value ="#{clubeCinemaBean.filme.diretor}"
+                             requiredMessage="Diretor não preenchido"/>
+                <h:message for="diretorInputText" styleClass="mensagem_erro"/>
+                
+                <h:outputText value="Ano *"/>
+                <h:inputText id="anoInputText" required="true"
+                             value="#{clubeCinemaBean.filme.ano}"
+                             requiredMessage="Ano não preenchido"
+                             validatorMessage="Formato incorreto do ano">
+                    <f:validateRegex pattern="\d{4}"/>         
+                </h:inputText>               
+                <h:message for="anoInputText" styleClass="mensagem_erro"/>
+                
+                <h:outputText value ="Gênero *"/>
+                <h:selectOneMenu id="gêneroSelectOneMenu" required="true"
+                                 value="#{clubeCinemaBean.filme.gênero}"
+                                 requiredMessage="Gênero não selecionado">
+                    <f:selectItem itemValue="ação" itemLabel="Ação" />
+                    <f:selectItem itemValue="aventura" itemLabel ="Aventura" />
+                    <f:selectItem itemValue="comédia" itemLabel ="Comédia" />
+                    <f:selectItem itemValue="drama" itemLabel ="Drama" />
+                </h:selectOneMenu>
+                <h:message for="gêneroSelectOneMenu" styleClass="mensagem_erro"/>
+                
+                <h:outputText value="Oscar de Melhor Filme *"/>
+                <h:selectOneRadio id="oscar_melhor_filmeSelectOneRadio" required="true"
+                                  value="#{clubeCinemaBean.filme.oscarMelhorFilme}"
+                                  requiredMessage ="Opção para Oscar de melhor filme não selecionada">
+                    <f:selectItem itemValue="não indicado" itemLabel ="Não Indicado"/>
+                    <f:selectItem itemValue="indicado" itemLabel ="Indicado"/>
+                    <f:selectItem itemValue="vencedor" itemLabel ="Vencedor"/>
+                </h:selectOneRadio>
+                <h:message for="oscar_melhor_filmeSelectOneRadio" styleClass="mensagem_erro"/>
+                
+            </h:panelGrid>    
+            
+            <h:panelGrid rendered="#{clubeCinemaBean.cadastrar}">
+                <h:commandButton value="Inserir" action="#{clubeCinemaBean.cadastrarFilme()}"/>
+            </h:panelGrid>
+            <p><h:outputLink value="pesquisa.xhtml">Pesquisar Filmes por Diretor</h:outputLink></p>
+        </h:form>
+    </h:body>
+</html>
+
