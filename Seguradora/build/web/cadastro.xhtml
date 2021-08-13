@@ -1,0 +1,65 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+    <h:head>
+        <f:facet name = "first">
+            <meta content='text/html; charset = UTF-8' http-equiv = "Content-Type"/>
+            <title>Cadastro de Veículos</title>
+        </f:facet>
+        <h:outputStylesheet name="style.css" library ="css"/>
+        <h:outputStylesheet name="default.css" library ="css"/>
+        <h:outputStylesheet name="overrides.css" library ="css"/>
+    </h:head>
+    
+    <h:body>
+        <h3>Cadastro de Veículos</h3>
+
+        <h:form>
+            
+            <h:panelGrid columns="3" style="height:100px;width:500px;">
+                
+                <h:outputText value="Dono *"/>
+                <h:inputText id="donoInputText" required="true"
+                             value ="#{seguradoraDB.veiculo.dono}"
+                             requiredMessage="Nome do dono não preenchido"/>
+                <h:message for="donoInputText" styleClass="mensagem_erro"/>
+               
+                <h:outputText value="Placa *"/>
+                <h:inputText id="placaInputText" required="true"
+                             value ="#{seguradoraDB.veiculo.placa}"
+                             requiredMessage="Placa não preenchida"/>                            
+                <h:message for="placaInputText" styleClass="mensagem_erro"/>
+                
+                <h:outputText value="Marca *"/>
+                <h:inputText id="marcaInputText" required="true"
+                             value ="#{seguradoraDB.veiculo.marca}"
+                             requiredMessage="Marca não preenchida"/>
+                <h:message for="marcaInputText" styleClass="mensagem_erro"/>
+                
+                <h:outputText value="Ano *"/>
+                <h:inputText id="anoInputText" required="true"
+                             value="#{seguradoraDB.veiculo.ano}"
+                             requiredMessage="Ano não preenchido"
+                             validatorMessage="Formato incorreto do ano">
+                    <f:validateRegex pattern="\d{4}"/>         
+                </h:inputText>               
+                <h:message for="anoInputText" styleClass="mensagem_erro"/>
+                
+                <h:outputText value="Modelo *"/>
+                <h:inputText id="modeloInputText" required="true"
+                             value ="#{seguradoraDB.veiculo.modelo}"
+                             requiredMessage="Modelo não preenchido"/>
+                <h:message for="modeloInputText" styleClass="mensagem_erro"/>
+                
+            </h:panelGrid>    
+            
+            <h:panelGrid>
+                <h:commandButton value="Inserir" action="#{seguradoraDB.cadastrarVeiculo()}"/>
+            </h:panelGrid>
+            <p><h:outputLink value="index.xhtml">Visualizar Veículos</h:outputLink></p>
+        </h:form>
+    </h:body>
+</html>
+

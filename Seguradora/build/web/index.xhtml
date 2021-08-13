@@ -1,0 +1,52 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+    <h:head>
+        <f:facet name = "first">
+            <meta content='text/html; charset = UTF-8' http-equiv = "Content-Type"/>
+            <title>Visualização de Veículos</title>
+        </f:facet>
+        <h:outputStylesheet name="style.css" library ="css"/>
+        <h:outputStylesheet name="default.css" library ="css"/>
+        <h:outputStylesheet name="overrides.css" library ="css"/>
+    </h:head>
+    
+    <h:body>
+        <h3>Visualizar veículos cadastrados</h3>
+        
+        <h:dataTable value="#{seguradoraDB.veiculos}" var="veiculo"
+                     rowClasses="oddRows, evenRows" headerClass="header"
+                     styleClass="table" cellpadding="5" cellspacing="0">
+            <h:column>
+                <f:facet name ="header">Dono</f:facet>
+                    #{veiculo.dono}
+            </h:column>
+            <h:column>
+                <f:facet name ="header">Placa</f:facet>
+                    #{veiculo.placa}
+            </h:column>
+            <h:column>
+                <f:facet name ="header">Marca</f:facet>
+                    #{veiculo.marca}
+            </h:column>
+            <h:column>
+                <f:facet name ="header">Ano</f:facet>
+                    #{veiculo.ano}
+            </h:column>
+            <h:column>
+                <f:facet name ="header">Modelo</f:facet>
+                    #{veiculo.modelo}
+            </h:column>
+        </h:dataTable> 
+        
+        <h:form>
+            <h:commandButton value="Cadastrar" action="cadastro"/>
+            <h:commandButton value="Pesquisar" action="pesquisa"/>
+        </h:form>
+                
+           
+                
+    </h:body>
+</html>

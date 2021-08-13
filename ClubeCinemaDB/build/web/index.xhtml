@@ -1,0 +1,52 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+    <h:head>
+        <f:facet name = "first">
+            <meta content='text/html; charset = UTF-8' http-equiv = "Content-Type"/>
+            <title>Visualização de Filmes</title>
+        </f:facet>
+        <h:outputStylesheet name="style.css" library ="css"/>
+        <h:outputStylesheet name="default.css" library ="css"/>
+        <h:outputStylesheet name="overrides.css" library ="css"/>
+    </h:head>
+    
+    <h:body>
+        <h3>Visualizar filmes cadastrados</h3>
+        
+        <h:dataTable value="#{clubeCinemaDBBean.filmes}" var="filme"
+                     rowClasses="oddRows, evenRows" headerClass="header"
+                     styleClass="table" cellpadding="5" cellspacing="0">
+            <h:column>
+                <f:facet name ="header">Título</f:facet>
+                    #{filme.título}
+            </h:column>
+            <h:column>
+                <f:facet name ="header">Diretor</f:facet>
+                    #{filme.diretor}
+            </h:column>
+            <h:column>
+                <f:facet name ="header">Gênero</f:facet>
+                    #{filme.gênero}
+            </h:column>
+            <h:column>
+                <f:facet name ="header">Ano</f:facet>
+                    #{filme.ano}
+            </h:column>
+            <h:column>
+                <f:facet name ="header">Oscar</f:facet>
+                    #{filme.oscarMelhorFilme}
+            </h:column>
+        </h:dataTable> 
+        
+        <h:form>
+            <h:commandButton value="Cadastrar" action="cadastrar"/>
+            <h:commandButton value="Pesquisar" action="pesquisa"/>
+        </h:form>
+                
+           
+                
+    </h:body>
+</html>
