@@ -22,25 +22,25 @@
                 
                 <h:outputText value="Dono *"/>
                 <h:inputText id="donoInputText" required="true"
-                             value ="#{seguradoraDB.veiculo.dono}"
+                             value ="#{seguradora.veiculo.dono}"
                              requiredMessage="Nome do dono não preenchido"/>
                 <h:message for="donoInputText" styleClass="mensagem_erro"/>
                
                 <h:outputText value="Placa *"/>
                 <h:inputText id="placaInputText" required="true"
-                             value ="#{seguradoraDB.veiculo.placa}"
+                             value ="#{seguradora.veiculo.placa}"
                              requiredMessage="Placa não preenchida"/>                            
                 <h:message for="placaInputText" styleClass="mensagem_erro"/>
                 
                 <h:outputText value="Marca *"/>
                 <h:inputText id="marcaInputText" required="true"
-                             value ="#{seguradoraDB.veiculo.marca}"
+                             value ="#{seguradora.veiculo.marca}"
                              requiredMessage="Marca não preenchida"/>
                 <h:message for="marcaInputText" styleClass="mensagem_erro"/>
                 
                 <h:outputText value="Ano *"/>
                 <h:inputText id="anoInputText" required="true"
-                             value="#{seguradoraDB.veiculo.ano}"
+                             value="#{seguradora.veiculo.ano}"
                              requiredMessage="Ano não preenchido"
                              validatorMessage="Formato incorreto do ano">
                     <f:validateRegex pattern="\d{4}"/>         
@@ -49,14 +49,14 @@
                 
                 <h:outputText value="Modelo *"/>
                 <h:inputText id="modeloInputText" required="true"
-                             value ="#{seguradoraDB.veiculo.modelo}"
+                             value ="#{seguradora.veiculo.modelo}"
                              requiredMessage="Modelo não preenchido"/>
                 <h:message for="modeloInputText" styleClass="mensagem_erro"/>
                 
             </h:panelGrid>    
             
             <h:panelGrid>
-                <h:commandButton value="Inserir" action="#{seguradoraDB.cadastrarVeiculo()}"/>
+                <h:commandButton value="Inserir" action="#{seguradora.cadastrarVeiculo()}"/>
             </h:panelGrid>
             <p><h:outputLink value="index.xhtml">Visualizar Veículos</h:outputLink></p>
         </h:form>

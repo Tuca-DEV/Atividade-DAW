@@ -19,28 +19,28 @@
             <h:panelGrid columns="2" style="height:50px; width: 300px;">
                 <h:outputText value="Selecione uma Marca *"/>
                 <h:selectOneMenu id="marcaSelectOneMenu" required="true"
-                                 value="#{seguradoraDB.marcaSelecionado}"
+                                 value="#{seguradora.marcaSelecionado}"
                                  requiredMessage="Marca não selecionada" style="width:100px;">
-                    <f:selectItems value="#{seguradoraDB.getMarcasItens()}"/>
+                    <f:selectItems value="#{seguradora.getMarcasItens()}"/>
                 </h:selectOneMenu>
-                <h:outputText value="Selecione um Dono *"/>
+                <h:outputText value="Selecione um Ano *"/>
                 <h:selectOneMenu id="donoSelectOneMenu" required="true"
-                                 value="#{seguradoraDB.donoSelecionado}"
+                                 value="#{seguradora.anoSelecionado}"
                                  requiredMessage="Dono não selecionado" style="width:100px;">
-                    <f:selectItems value="#{seguradoraDB.getDonosItens()}"/>
+                    <f:selectItems value="#{seguradora.getAnosItens()}"/>
                 </h:selectOneMenu>
             </h:panelGrid>
-            <h:commandButton value="Pesquisar" action="#{seguradoraDB.pesquisarVeiculo()}"/>
+            <h:commandButton value="Pesquisar" action="#{seguradora.pesquisarVeiculo()}"/>
         </h:form>
-        <h:panelGrid rendered="#{seguradoraDB.pesquisar}">
+        <h:panelGrid rendered="#{seguradora.pesquisar}">
             <h:form>
-                <h:outputFormat value="Veículos da marca: {0} e do Dono: {1}" styleClass="mensagem">
-                    <f:param value="#{seguradoraDB.marcaSelecionado}"/>
-                    <f:param value="#{seguradoraDB.donoSelecionado}"/>
+                <h:outputFormat value="Veículos da marca: {0} e do Ano: {1}" styleClass="mensagem">
+                    <f:param value="#{seguradora.marcaSelecionado}"/>
+                    <f:param value="#{seguradora.anoSelecionado}"/>
                 </h:outputFormat>
             </h:form>
             <ul>
-                <ui:repeat value="#{seguradoraDB.getInfoVeiculosFiltro()}" var="info_veiculo">
+                <ui:repeat value="#{seguradora.getInfoVeiculosFiltro()}" var="info_veiculo">
                     <li>#{info_veiculo}</li>
                 </ui:repeat>
             </ul>

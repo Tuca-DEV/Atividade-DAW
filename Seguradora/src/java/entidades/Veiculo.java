@@ -15,8 +15,8 @@ public class Veiculo {
 
     public Veiculo(String dono, String marca, String placa, String ano, String modelo) {
         this.dono = dono;
-        this.marca = marca;
         this.placa = placa;
+        this.marca = marca;
         this.ano = ano;
         this.modelo = modelo;
     }
@@ -27,7 +27,7 @@ public class Veiculo {
     
     @Override
     public String toString(){
-        return  ano + " - " + placa + " - " + modelo;
+        return  dono + " - " + placa + " - " + modelo;
     }
 
     public String getDono() {
