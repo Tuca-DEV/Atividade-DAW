@@ -8,4 +8,4 @@
     * EclipseLink
  * MySQL
  * WildFly
- * XHTML
+ * XHTML e CSS
