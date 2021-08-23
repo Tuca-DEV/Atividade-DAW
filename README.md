@@ -3,6 +3,8 @@
  ***
  Linguagens/Ferramentas utilizadas:
  * JAVA
+    * JSF
+    * JPA
     * Java EE 7
     * NetBeans
     * EclipseLink
