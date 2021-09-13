@@ -1,0 +1,122 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html">
+      <h:head>
+        <title>Facelet Title</title>
+    </h:head>
+
+    <h:body>
+        <ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                        xmlns:h="http://java.sun.com/jsf/html"
+                        xmlns:f="http://java.sun.com/jsf/core"
+                        xmlns:ui="http://java.sun.com/jsf/facelets"
+                        xmlns:p="http://primefaces.org/ui"
+                        template="/template.xhtml">
+            <ui:define name="conteudo">
+                <h2>Cadastrar Veículos</h2>
+                <p:panel header="Veículos Cadastrados">
+                    <p:outputPanel id="veiculo" >
+                        <p:dataTable id="dataTable" var="veiculo"
+                                     value="#{veiculoBean.all}"
+                                     widgetVar="tabelaVeiculos"
+                                     emptyMessage="Nenhum registro encontrado">
+                            <p:column headerText="Placa">
+                                <h:outputText value="#{veiculo.placa}"/>
+                            </p:column>
+                            
+                            <p:column headerText="Ano">
+                                <h:outputText value="#{veiculo.ano}"/>
+                            </p:column>
+
+                            <p:column headerText="Marca">
+                                <h:outputText value="#{veiculo.marca}"/>
+                            </p:column>
+
+                            <p:column headerText="Proprietário">
+                                <h:outputText value="#{veiculo.proprietario}"/>
+                            </p:column>
+
+                            <p:column headerText="Seguro Ativo">
+                                <h:outputText value="#{veiculo.seguroAtivo}"/>
+                            </p:column>
+
+                            <p:column headerText="Ação">
+                                <p:commandButton value="Consultar" action="#{veiculoBean.consultar(veiculo)}"
+                                                 oncomplete="panelVeiculo.show();"
+                                                 update=":form:displayVeiculo"/>
+                            </p:column>
+                        </p:dataTable>
+                        <p:panel>
+                            <p:commandButton value="Cadastrar"
+                                             actionListener="#{veiculoBean.inserir()}"
+                                             oncomplete="panelVeiculo.show();"
+                                             update=":form:displayVeiculo"/>
+                        </p:panel>
+                    </p:outputPanel>
+                </p:panel>
+                <p:panel header="Dados do Veículo" id="dadosVeiculo" widgetVar="panelVeiculo"
+                         visible="false" closable="true" style="margin-top:10px">
+                    <p:messages id="erroSeguradora"/>
+
+                    <h:panelGrid id="displayVeiculo" columns="1" styleClass="grid">
+                        <p:panel>
+                            <h:panelGrid columns="3" columnClasses="label, value" styleClass="grid">
+                                
+                                <h:outputText value="Placa *"/>
+                                <p:inputText id="placaInputText"
+                                             required="#{param['form:inserirCommandButton']!= null || param['form:alterarCommandButton']!= null}"
+                                             label="Placa"
+                                             value="#{veiculoBean.value.placa}" styleClass="ipt-large"
+                                             validatorMessage="Placa: Erro de validação: O Formato está incorreto.">
+                                             <f:validateRegex pattern="[A-Z]{3}[0-9][0-9A-Z][0-9]{2}"/>
+                                </p:inputText>
+                                <p:message for="placaInputText"/>
+                                
+                                <h:outputText value="Ano (dddd/dddd) *"/>
+                                <p:inputText id="anoInputText"
+                                             required="#{param['form:inserirCommandButton']!= null || param['form:alterarCommandButton']!= null}"
+                                             label="Ano"
+                                             value="#{veiculoBean.value.ano}" styleClass="ipt-large"
+                                             validatorMessage="Ano: Erro de validação: O Formato está incorreto. Exemplo de formato correto: 2020/2021">
+                                             <f:validateRegex pattern="[1-2][0-9]{3}/[1-2][0-9]{3}"/>
+                                </p:inputText>
+                                <p:message for="anoInputText"/>
+
+                                <h:outputText value="Marca *"/>
+                                <p:inputText id="marcaInputText"
+                                             required="#{param['form:inserirCommandButton']!= null || param['form:alterarCommandButton']!= null}"
+                                             label="Marca"
+                                             value="#{veiculoBean.value.marca}" styleClass="ipt-large"/>
+                                <p:message for="marcaInputText"/>
+
+                                <h:outputText value="Proprietário *"/>
+                                <p:inputText id="proprietarioInputText"
+                                             required="#{param['form:inserirCommandButton']!= null || param['form:alterarCommandButton']!= null}"                                             label="Proprietário"
+                                             value="#{veiculoBean.value.proprietario}" styleClass="ipt-large"/>
+                                <p:message for="proprietarioInputText"/>
+
+                                <h:outputText value="Seguro Ativo"/>
+                                <p:selectBooleanCheckbox id="seguroSelectBooleanCheckBox"
+                                                         value="#{veiculoBean.value.seguroAtivo}"/>
+                                <p:message for="seguroSelectBooleanCheckBox"/>
+
+                            </h:panelGrid>
+                        </p:panel>
+                        <h:panelGroup rendered="#{!veiculoBean.consultado}">
+                            <p:commandButton id="inserirCommandButton" value="Inserir" action="#{veiculoBean.save()}"
+                                             ajax="false" icon="ui-icon-circle-plus"/>
+                        </h:panelGroup>
+                        <h:panelGroup rendered="#{veiculoBean.consultado}">
+                            <p:commandButton id="alterarCommandButton" value="Alterar" action="#{veiculoBean.update()}"
+                                             ajax="false" icon="ui-icon-circle-arrow-e"/>
+                            <p:commandButton value="Remover" action="#{veiculoBean.delete()}"
+                                             ajax="false" icon="ui-icon-circle-minus"/>
+                        </h:panelGroup>
+                    </h:panelGrid>
+                </p:panel>
+
+            </ui:define>
+        </ui:composition> 
+    </h:body>
+</html>
