@@ -1,0 +1,206 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html">
+    <h:head>
+        <title>Facelet Title</title>
+    </h:head>
+
+    <h:body>
+        <ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                    xmlns:h="http://java.sun.com/jsf/html"
+                    xmlns:f="http://java.sun.com/jsf/core"
+                    xmlns:ui="http://java.sun.com/jsf/facelets"
+                    xmlns:p="http://primefaces.org/ui"
+                    template="/template.xhtml">
+        <ui:define name="conteudo">
+            <h2>Cadastrar Clientes</h2>
+            <p:panel header="Clientes Cadastrados">
+                <p:outputPanel id="cliente">
+                    <p:dataTable id="dataTable" var="cliente"
+                                 value="#{clienteBean.all}"
+                                 widgetVar="tabelaClientes"
+                                 emptyMessage="Nenhum registro encontrado"
+                                 filteredValue="#{clienteBean.clientesFiltrados}">
+                        
+                        <p:column headerText="Nome" filterBy="nome" footerText="startsWith">
+                            <h:outputText value="#{cliente.nome}"/>
+                        </p:column>
+                        
+                        <p:column headerText="CPF" filterBy="cpf" footerText="startsWith">
+                            <h:outputText value="#{cliente.cpf}"/>
+                        </p:column>
+                        
+                        <p:column filterBy="sexo"
+                                  headerText="Sexo"
+                                  footerText="exact"
+                                  filterOptions="#{clienteBean.getSexos(true)}">
+                            <h:outputText value="#{cliente.sexo}"/>
+                        </p:column>
+                        
+                        <p:column filterBy="estadoCivil"
+                                  headerText="Estado Civil" footerText="exact"
+                                  filterOptions="#{clienteBean.getEstadosCivis(true)}"
+                                  filterMatchMode="exact">
+                            <h:outputText value="#{cliente.estadoCivil}"/>
+                        </p:column>
+                        
+                     
+                        <p:column headerText="Ação">
+                            <p:commandButton value="Consultar" action="#{clienteBean.consultar(cliente)}"
+                                             oncomplete="panelCliente.show();"
+                                             update=":form:displayCliente"/>
+                        </p:column>
+                    </p:dataTable>
+                    <p:panel>
+                        <p:commandButton value="Cadastrar"
+                                         actionListener="#{clienteBean.inserir()}"
+                                         oncomplete="panelCliente.show();"
+                                         update=":form:displayCliente"/>
+                    </p:panel>
+                </p:outputPanel>
+            </p:panel>
+            <p:panel header="Dados do Cliente" id="dadosCliente" widgetVar="panelCliente"
+                     visible="false" closable="true" style="margin-top:10px">
+                <p:messages id="erroCliente"/>
+                <h:panelGrid id="displayCliente" columns="1" styleClass="grid">
+                    <p:panel>
+                        <p:wizard
+                            flowListener="#{clienteBean.onFlowProcess}"
+                            backLabel="Anterior"
+                            nextLabel="Próximo">
+                            <p:tab id="dadosPessoais" title="1. Dados Pessoais">
+                                <p:panel header="Dados Pessoais">
+                                    <h:panelGrid columns="3" columnClasses="label, value" styleClass="grid">
+                                        <h:outputText value="Nome Completo *"/>
+                                        <p:inputText id="nomeInputText" 
+                                                            required="#{param['form:inserirCommandButton']!= null || param['form:alterarCommandButton']!= null}"
+                                                            label="Nome" value="#{clienteBean.value.nome}" styleClass="grid"
+                                                            requiredMessage="nome não preenchido">
+                                        </p:inputText>
+                                        <p:message for="nomeInputText"/>
+                                        
+                                        <h:outputText value="CPF *"/>
+         
+                                        <p:inputMask id="cpfInputText" required="#{param['form:inserirCommandButton']!= null || param['form:alterarCommandButton']!= null}"
+                                                     label="CPF" value="#{clienteBean.value.cpf}" 
+                                                     mask="999.999.999-99"
+                                                     requiredMessage="CPF não preenchido">
+                                        </p:inputMask>
+                                        <p:message for="cpfInputText"/>
+                                        
+                                        <h:outputText value="Sexo *"/>
+                                        <p:selectOneRadio id="sexoSelectOneRadio"
+                                                                          value="#{clienteBean.value.sexo}"
+                                                                          required="false" label="Sexo">
+                                                <f:selectItem itemValue="masculino" itemLabel="Masculino"/>
+                                                <f:selectItem itemValue="feminino" itemLabel="Feminino"/>
+                                        </p:selectOneRadio>
+                                        <p:message for="sexoSelectOneRadio"/>
+                                        
+                                        <h:outputText value="Estado Civil *"/>
+                                        <p:selectOneMenu id="estadoCivilSelectOneMenu"
+                                                                         value="#{clienteBean.value.estadoCivil}"
+                                                                         required="false" label="Estado Civil" style="width:100px">  
+                                                <f:selectItems value="#{clienteBean.getEstadosCivis(false)}"/>
+                                        </p:selectOneMenu>
+                                        <p:message for="estadoCivilSelectOneMenu"/>
+    
+                                        <h:outputText value="CEP *"/>
+                                        <p:inputMask id="cepInputText" required="#{param['form:inserirCommandButton']!= null || param['form:alterarCommandButton']!= null}"
+                                                     label="CEP" value="#{clienteBean.value.CEP}" 
+                                                     mask="99999-999"
+                                                     requiredMessage="CEP não preenchido">
+                                        </p:inputMask>
+                                        <p:message for="cepInputText"/>
+                                        
+                                        <h:outputText value="Estado *"/>
+                                        <h:selectOneMenu id="estadoSelectOneMenu" required="false"
+                                                          value="#{clienteBean.value.estado}"
+                                                          label="Estado" style="width:100px">
+                                            <f:selectItem itemValue="ac" itemLabel="AC"/>
+                                            <f:selectItem itemValue="al" itemLabel="AL"/>
+                                            <f:selectItem itemValue="ap" itemLabel="AP"/>
+                                            <f:selectItem itemValue="ba" itemLabel="BA"/>
+                                            <f:selectItem itemValue="ce" itemLabel="CE"/>
+                                            <f:selectItem itemValue="df" itemLabel="DF"/>
+                                            <f:selectItem itemValue="es" itemLabel="ES"/>
+                                            <f:selectItem itemValue="go" itemLabel="GO"/>
+                                            <f:selectItem itemValue="ma" itemLabel="MA"/>
+                                            <f:selectItem itemValue="mt" itemLabel="MT"/>
+                                            <f:selectItem itemValue="ms" itemLabel="MS"/>
+                                            <f:selectItem itemValue="mg" itemLabel="MG"/>
+                                            <f:selectItem itemValue="pa" itemLabel="PA"/>
+                                            <f:selectItem itemValue="pb" itemLabel="PB"/>
+                                            <f:selectItem itemValue="pr" itemLabel="PR"/>
+                                            <f:selectItem itemValue="pe" itemLabel="PE"/>
+                                            <f:selectItem itemValue="pi" itemLabel="PI"/>
+                                            <f:selectItem itemValue="rj" itemLabel="RJ"/>
+                                            <f:selectItem itemValue="rn" itemLabel="RN"/>
+                                            <f:selectItem itemValue="rs" itemLabel="RS"/>
+                                            <f:selectItem itemValue="ro" itemLabel="RO"/>
+                                            <f:selectItem itemValue="rr" itemLabel="RR"/>
+                                            <f:selectItem itemValue="sc" itemLabel="SC"/>
+                                            <f:selectItem itemValue="sp" itemLabel="SP"/>
+                                            <f:selectItem itemValue="se" itemLabel="SE"/>
+                                            <f:selectItem itemValue="to" itemLabel="TO"/>
+                                        </h:selectOneMenu>
+                                        <h:message for="estadoSelectOneMenu" styleClass="mensagem_erro"/>
+                                        
+                                        <h:outputText value="Cidade *"/>
+                                        <p:inputText id="cidadeInputText" required="#{param['form:inserirCommandButton']!= null || param['form:alterarCommandButton']!= null}"
+                                                                 label="Cidade" value="#{clienteBean.value.cidade}" styleClass="grid"
+                                                                 requiredMessage="cidade não preenchida">
+                                        </p:inputText>
+                                        <p:message for="cidadeInputText"/>
+                                        
+                                        <h:outputText value="Rua e n° *"/>
+                                        <p:inputText id="ruaInputText" required="#{param['form:inserirCommandButton']!= null || param['form:alterarCommandButton']!= null}"
+                                                                 label="Rua" value="#{clienteBean.value.rua}" styleClass="grid"
+                                                                 requiredMessage="rua e/ou n° não preenchidos">
+                                        </p:inputText>
+                                        <p:message for="ruaInputText"/>
+                                    </h:panelGrid>
+                                </p:panel>
+                            </p:tab>
+                            <p:tab id="Contatos" title="2. Contatos">
+                                <p:panel header="Contatos">
+                                    <h:panelGrid columns="3" columnClasses="label, value" styleClass="grid">
+                                        <h:outputText value="Email *"/>
+                                        <p:inputText id="emailInputText" required="#{param['form:inserirCommandButton']!= null || param['form:alterarCommandButton']!= null}"
+                                                     label="Email" value="#{clienteBean.value.email}" styleClass="grid"
+                                                     requiredMessage="email não preenchido">
+                                        </p:inputText>
+                                        <p:message for="emailInputText"/>
+                                        
+                                        <h:outputText value="Telefone *"/>
+                                        
+                                        <p:inputMask id="telefoneInputText" required="#{param['form:inserirCommandButton']!= null || param['form:alterarCommandButton']!= null}"
+                                                     label="Telefone" value="#{clienteBean.value.telefone}" 
+                                                     mask="(99)99999-9999"
+                                                     requiredMessage="telefone não preenchido">
+                                        </p:inputMask>
+                                        <p:message for="telefoneInputText"/>
+
+                                    </h:panelGrid>
+                                </p:panel>
+                            </p:tab>
+                        </p:wizard>
+                    </p:panel>
+                    <h:panelGroup rendered="#{!clienteBean.consultado}">
+                        <p:commandButton value="Inserir" action="#{clienteBean.save()}"
+                                         ajax="false" icon="ui-icon-circle-plus"/>
+                    </h:panelGroup>
+                    <h:panelGroup rendered="#{clienteBean.consultado}">
+                        <p:commandButton value="Alterar" action="#{clienteBean.update()}"
+                                         ajax="false" icon="ui-icon-circle-arrow-e"/>
+                        <p:commandButton value="Remover" action="#{clienteBean.delete()}"
+                                         ajax="false" icon="ui-icon-circle-minus"/>
+                    </h:panelGroup>
+                </h:panelGrid>
+            </p:panel>
+            
+        </ui:define>
+        </ui:composition> 
+    </h:body>
+</html>
