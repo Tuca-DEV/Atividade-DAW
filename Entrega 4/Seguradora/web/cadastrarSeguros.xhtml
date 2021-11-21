@@ -1,0 +1,100 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html">
+    <h:head>
+        <title>Facelet Title</title>
+    </h:head>
+
+    <h:body>
+        <ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                    xmlns:h="http://java.sun.com/jsf/html"
+                    xmlns:f="http://java.sun.com/jsf/core"
+                    xmlns:ui="http://java.sun.com/jsf/facelets"
+                    xmlns:p="http://primefaces.org/ui"
+                    template="/template.xhtml">
+        <ui:define name="conteudo">
+            <h2>Cadastrar Seguros</h2>
+            <p:panel header="Seguros Cadastrados">
+                <p:outputPanel id="seguro">
+                    <p:dataTable id="dataTable" var="seguro"
+                                 value="#{seguroBean.all}"
+                                 widgetVar="tabelaSeguros"
+                                 emptyMessage="Nenhum registro encontrado"
+                                 filteredValue="#{seguroBean.segurosFiltrados}">
+                        
+                        
+                        
+                        <p:column headerText="Ano" filterBy="ano" footerText="startsWith">
+                            <h:outputText value="#{seguro.ano}"/>
+                        </p:column>
+                        
+                        
+                        <p:column headerText="Título do Bem" filterBy="bem.titulo" footerText="startsWith">
+                            <h:outputText value="#{seguro.bem.titulo}"/>
+                        </p:column>
+                        
+                        <p:column headerText="Cliente" filterBy="bem.cliente.nome" footerText="startsWith">
+                            <h:outputText value="#{seguro.bem.cliente.nome}"/>
+                        </p:column>
+
+                        <p:column headerText="Ação">
+                            <p:commandButton value="Consultar" action="#{seguroBean.consultar(seguro)}"
+                                             oncomplete="panelSeguro.show();"
+                                             update=":form:displaySeguro"/>
+                        </p:column>
+                    </p:dataTable>
+                    <p:panel>
+                        <p:commandButton value="Cadastrar"
+                                         actionListener="#{seguroBean.inserir()}"
+                                         oncomplete="panelSeguro.show();"
+                                         update=":form:displaySeguro"/>
+                    </p:panel>
+                </p:outputPanel>
+            </p:panel>
+            <p:panel header="Dados do Seguro" id="dadosSeguro" widgetVar="panelSeguro"
+                     visible="false" closable="true" style="margin-top:10px">
+                <p:messages id="erroSeguro"/>
+                
+                <h:panelGrid id="displaySeguro" columns="1" styleClass="grid">
+                    <p:panel>
+                        <h:panelGrid columns="3" columnClasses="label, value" styleClass="grid">
+                            
+                            
+                            
+                            
+                            <h:outputText value="Ano *"/>
+                                        <p:inputMask id="anoInputText" required="#{param['form:inserirCommandButton']!= null || param['form:alterarCommandButton']!= null}"
+                                                     label="Ano" value="#{seguroBean.value.ano}" styleClass="grid"
+                                                     mask="9999"
+                                                     requiredMessage="Ano não preenchido">
+                                        </p:inputMask>
+                                        <p:message for="anoInputText"/>
+
+                            <h:outputText value="Bem(Título) *"/>
+                            <p:autoComplete id="bemAutoComplete" value="#{seguroBean.value.bem}"
+                                            completeMethod="#{bemBean.completaBens}"
+                                            converter="#{bemConverter}"
+                                            var="bem" itemValue="#{bem}" itemLabel="#{bem.titulo}"
+                                            requiredMessage="Título não preenchido"/>
+                            <p:message for="bemAutoComplete"/>
+                            
+                        </h:panelGrid>
+                    </p:panel>
+                    <h:panelGroup rendered="#{!seguroBean.consultado}">
+                        <p:commandButton value="Inserir" action="#{seguroBean.save()}"
+                                         ajax="false" icon="ui-icon-circle-plus"/>
+                    </h:panelGroup>
+                    <h:panelGroup rendered="#{seguroBean.consultado}">
+                        <p:commandButton value="Alterar" action="#{seguroBean.update()}"
+                                         ajax="false" icon="ui-icon-circle-arrow-e"/>
+                        <p:commandButton value="Remover" action="#{seguroBean.delete()}"
+                                         ajax="false" icon="ui-icon-circle-minus"/>
+                    </h:panelGroup>
+                </h:panelGrid>
+            </p:panel>
+            
+        </ui:define>
+        </ui:composition> 
+    </h:body>
+</html>

@@ -1,0 +1,140 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html">
+    <h:head>
+        <title>Facelet Title</title>
+    </h:head>
+
+    <h:body>
+        <ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                    xmlns:h="http://java.sun.com/jsf/html"
+                    xmlns:f="http://java.sun.com/jsf/core"
+                    xmlns:ui="http://java.sun.com/jsf/facelets"
+                    xmlns:p="http://primefaces.org/ui"
+                    template="/template.xhtml">
+        <ui:define name="conteudo">
+            <h2>Cadastrar um Bem</h2>
+            <p:panel header="Bens Cadastrados">
+                <p:outputPanel id="bem">
+                    <p:dataTable id="dataTable" var="bem"
+                                 value="#{bemBean.all}"
+                                 widgetVar="tabelaBens"
+                                 emptyMessage="Nenhum registro encontrado"
+                                 filteredValue="#{bemBean.bensFiltrados}">
+                        
+                        <p:column headerText="Tipo de bem"
+                                  filterBy="tipo"
+                                  footerText="exact"
+                                  filterOptions="#{bemBean.getTipos(true)}">
+                            <h:outputText value="#{bem.tipo.label}"/>
+                        </p:column>
+                        
+                        <p:column headerText="Título" filterBy="titulo" footerText="startsWith">
+                            <h:outputText value="#{bem.titulo}"/>
+                        </p:column>
+                        
+                        <p:column headerText="Nome do Contratante"
+                                  filterBy="cliente.nome"
+                                  footerText="startsWith">
+                            <h:outputText value="#{bem.cliente.nome}"/>
+                        </p:column>
+                                                
+                        <p:column headerText="Mensalidade"
+                                  filterBy="mensalidade"
+                                  footerText="startsWith">
+                            <h:outputText value="#{bem.mensalidade}">
+                            </h:outputText>
+                        </p:column>
+                        
+                        <p:column headerText="Seguro Ativo"
+                                  filterBy="seguroAtivo"
+                                  footerText="exact"
+                                  filterOptions="#{bemBean.getSegurosAtivos()}">
+                            <h:outputText value="#{bem.seguroAtivo}"/>
+                        </p:column>
+                        
+                        <p:column headerText="Ação">
+                            <p:commandButton value="Consultar" action="#{bemBean.consultar(bem)}"
+                                             oncomplete="panelBem.show();"
+                                             update=":form:displayBem"/>
+                        </p:column>
+                    </p:dataTable>
+                    <p:panel>
+                        <p:commandButton value="Cadastrar"
+                                         actionListener="#{bemBean.inserir()}"
+                                         oncomplete="panelBem.show();"
+                                             update=":form:displayBem"/>
+                    </p:panel>
+                </p:outputPanel>
+            </p:panel>
+            <p:panel header="Dados do Bem" id="dadosBem" widgetVar="panelBem"
+                     visible="false" closable="true" style="margin-top:10px">
+                <p:messages id="erroBem"/>
+                
+                <h:panelGrid id="displayBem" columns="1" styleClass="grid">
+                    <p:panel>
+                        <h:panelGrid columns="3" columnClasses="label, value" styleClass="grid">
+                            
+                            <h:outputText value="Tipo de Bem *"/>
+                            <h:selectOneRadio id="tipoSelectRadio" required="false"
+                                              value="#{bemBean.value.tipo}"
+                                              requiredMessage="opção para bem não selecionada" >
+                                <f:selectItem itemValue="veiculo" itemLabel="Veículo"/>
+                                <f:selectItem itemValue="imovel" itemLabel="Imóvel"/>
+                                <f:selectItem itemValue="vida" itemLabel="Vida"/>
+                               
+                            </h:selectOneRadio>
+                            <h:message for="tipoSelectRadio" styleClass="mensagem_erro"/>
+                            
+                            <h:outputText value="Título (ex:Vc001)*"/>
+                            <p:inputText id="tituloInputText" required="#{param['form:inserirCommandButton']!= null || param['form:alterarCommandButton']!= null}"
+                                         label="Titulo" value="#{bemBean.value.titulo}" styleClass="grid"
+                                         requiredMessage="titulo não preenchido" style="width: 150px">
+                            </p:inputText>
+                            <p:message for="tituloInputText"/>
+
+                     
+                            
+                            <h:outputText value="Contratante *"/>
+                            <p:autoComplete id="clienteAutoComplete" value="#{bemBean.value.cliente}"
+                                            completeMethod="#{clienteBean.completaClientes}"
+                                            converter="#{clienteConverter}"
+                                            var="cliente" itemValue="#{cliente}" itemLabel="#{cliente.nome}"
+                                            requiredMessage="Contratante não preenchido"
+                                            required="#{param['form:inserirCommandButton']!= null || param['form:alterarCommandButton']!= null}"/>
+                            <p:message for="clienteAutoComplete"/>
+                            
+                            <h:outputText value="Valor da mensalidade(R$) *"/>
+                            <h:inputText id="mensalidadeInputText" required="#{param['form:inserirCommandButton']!= null || param['form:alterarCommandButton']!= null}" 
+                                         value="#{bemBean.value.mensalidade}"
+                                         requiredMessage="mensalidade não preenchida"/>
+                            <p:message for="mensalidadeInputText"/>
+
+                            <h:outputText value="Seguro Ativo: *"/>
+                            <p:selectBooleanCheckbox id="seguroAtivoSelectBooleanCheckbox"
+                                                     value="#{bemBean.value.seguroAtivo}"/>
+                            <p:message for="seguroAtivoSelectBooleanCheckbox"/>
+                            
+                            
+                        </h:panelGrid>
+                    </p:panel>
+                    <h:panelGroup rendered="#{!bemBean.consultado}">
+                        <p:commandButton value="Inserir" action="#{bemBean.save()}"
+                                         ajax="false" icon="ui-icon-circle-plus"
+                                         id="inserirCommandButton"/>
+                    </h:panelGroup>
+                    <h:panelGroup rendered="#{bemBean.consultado}">
+                        <p:commandButton value="Alterar" action="#{bemBean.update()}"
+                                         ajax="false" icon="ui-icon-circle-arrow-e"
+                                         id="alterarCommandButton"/>
+                        <p:commandButton value="Remover" action="#{bemBean.delete()}"
+                                         ajax="false" icon="ui-icon-circle-minus"/>
+                    </h:panelGroup>
+                </h:panelGrid>
+            </p:panel>
+            
+        </ui:define>
+        </ui:composition> 
+    </h:body>
+</html>
