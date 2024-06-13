@@ -1,6 +1,7 @@
 # Atividade-DAW
- Projeto final da disciplina Desenvolvimento de Aplicações Web __(DAW)__<br>
- Foi desenvolvido uma aplicação web de uma seguradora de imóveis, automóveis e vida para cadastrar seus clientes
+ Projeto da disciplina Desenvolvimento de Aplicações Web __(DAW)__<br>
+ Foi desenvolvido uma aplicação web de uma seguradora de imóveis, automóveis e vida para cadastrar seus clientes<br>
+ O resultado final se encontra no folder **Atividade 4**
  ***
  ## Funcionalidades
  * Cadastramento dos clientes da Seguradora
